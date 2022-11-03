@@ -9,9 +9,10 @@
  */
 
 import React from 'react';
-import Navigation from './navigations/index';
+import Navigation from './src/navigations/index';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
+import {LogBox} from 'react-native';
 
 const App = () => {
   return (
@@ -22,5 +23,7 @@ const App = () => {
     </>
   );
 };
+
+LogBox.ignoreLogs(['Task orphaned for request']);
 
 export default App;

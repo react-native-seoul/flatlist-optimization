@@ -23,7 +23,7 @@ export default function Navigator() {
             tabBarIcon: () => (
               <View>
                 <Image
-                  source={require('../assets/gallery.png')}
+                  source={require('../../assets/gallery.png')}
                   style={{width: 30, height: 30}}
                 />
               </View>
