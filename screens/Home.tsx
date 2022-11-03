@@ -1,17 +1,27 @@
 import React from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {FlatList, Image, StyleSheet, View} from 'react-native';
 
 const URL = 'https://source.unsplash.com/random';
-const Images: string[] = Array(13).fill(URL);
+const IMAGES: string[] = Array(150).fill(URL);
 
 export default function HomeScreen(): React.ReactElement {
+  const onEndReach = () => {
+    const extraImages: string[] = Array(30).fill(URL);
+    IMAGES.push(...extraImages);
+
+    console.log(IMAGES.length);
+  };
   return (
     <View style={styles.container}>
-      <View style={styles.sectionContainer}>
-        {Images.map((data, index) => (
-          <Image key={data + index} source={{uri: data}} style={styles.image} />
-        ))}
-      </View>
+      <FlatList
+        contentContainerStyle={styles.sectionContainer}
+        numColumns={3}
+        data={IMAGES}
+        renderItem={({item, index}) => (
+          <Image key={item + index} source={{uri: item}} style={styles.image} />
+        )}
+        onEndReached={onEndReach}
+      />
     </View>
   );
 }
@@ -22,10 +32,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   sectionContainer: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
+    flexDirection: 'column',
     justifyContent: 'space-between',
-    marginHorizontal: -1,
   },
   image: {
     borderColor: 'white',
