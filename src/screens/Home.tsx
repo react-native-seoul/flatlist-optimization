@@ -8,16 +8,7 @@ import {
   View,
 } from 'react-native';
 import {Photo, useAlbum} from '../hooks/useAlbum';
-
-let counts: Record<string, number> = {};
-const logCount = function (key: string) {
-  if (counts[key] === undefined) {
-    counts[key] = 1;
-  } else {
-    counts[key]++;
-  }
-  console.log(`count ${counts[key]} :: ${key}`);
-};
+import {consoleCount} from '../utils';
 
 export default function HomeScreen(): React.ReactElement {
   const {data, onLoadNext} = useAlbum(100);
@@ -67,11 +58,11 @@ type PhotoViewProps = {
 const PhotoView = ({photo, onPress, selected}: PhotoViewProps) => {
   const [loading, setLoading] = useState(true);
 
-  logCount('render PhotoView:' + photo.id);
+  consoleCount('render PhotoView:' + photo.id);
 
   useEffect(() => {
     return () => {
-      logCount('unmount PhotoView:' + photo.id);
+      consoleCount('unmount PhotoView:' + photo.id);
     };
   }, []);
 

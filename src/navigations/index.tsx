@@ -4,6 +4,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 
 import HomeScreen from '../screens/Home';
 import {Image, StatusBar, View} from 'react-native';
+import FeedScreen from '../screens/Feed';
 
 const RootTab = createBottomTabNavigator();
 
@@ -20,6 +21,21 @@ export default function Navigator() {
           component={HomeScreen}
           options={{
             title: '앨범',
+            tabBarIcon: () => (
+              <View>
+                <Image
+                  source={require('../../assets/gallery.png')}
+                  style={{width: 30, height: 30}}
+                />
+              </View>
+            ),
+          }}
+        />
+        <RootTab.Screen
+          name="Feed"
+          component={FeedScreen}
+          options={{
+            title: '피드',
             tabBarIcon: () => (
               <View>
                 <Image

@@ -2,9 +2,12 @@ import {UseDataList} from '../types';
 import {faker} from '@faker-js/faker/locale/ko';
 import {useCallback, useRef, useState} from 'react';
 
-interface Post {
+export interface Post {
   id: string;
-  text: string;
+
+  content: string;
+  photo: string;
+
   likes: number;
   author: string;
   profile: string;
@@ -14,7 +17,8 @@ interface Post {
 function createPost(): Post {
   return {
     id: faker.datatype.uuid(),
-    text: faker.lorem.text(),
+    content: faker.lorem.text(),
+    photo: faker.image.abstract(),
     likes: faker.datatype.number({min: 0, max: 800}),
     author: faker.name.fullName(),
     profile: faker.image.people(300, 300, true),
