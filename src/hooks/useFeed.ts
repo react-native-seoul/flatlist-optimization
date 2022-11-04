@@ -18,7 +18,7 @@ function createPost(): Post {
   return {
     id: faker.datatype.uuid(),
     content: faker.lorem.text(),
-    photo: faker.image.abstract(),
+    photo: faker.image.abstract(600, 600, true),
     likes: faker.datatype.number({min: 0, max: 800}),
     author: faker.name.fullName(),
     profile: faker.image.people(300, 300, true),

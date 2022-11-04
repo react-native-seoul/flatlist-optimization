@@ -49,7 +49,6 @@ const PostCard = ({post}: PostCardProps) => {
     <View>
       <View style={styles.top}>
         <Image
-          onLoadEnd={() => setLoading(false)}
           resizeMode={'cover'}
           source={{uri: post.profile}}
           style={styles.profile}
@@ -81,12 +80,12 @@ const PostCard = ({post}: PostCardProps) => {
               resizeMode={'contain'}
             />
             <Image
-              source={require('../../assets/Share.png')}
+              source={require('../../assets/Comment.png')}
               style={styles.icon}
               resizeMode={'contain'}
             />
             <Image
-              source={require('../../assets/Comment.png')}
+              source={require('../../assets/Share.png')}
               style={styles.icon}
               resizeMode={'contain'}
             />
