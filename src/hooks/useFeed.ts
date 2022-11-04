@@ -29,7 +29,7 @@ function createPost(): Post {
 function createFeed(length = 20) {
   return Array.from({length})
     .map(createPost)
-    .sort((a, b) => b.createdAt.getDate() - a.createdAt.getDate());
+    .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime());
 }
 
 const feed = createFeed(500);
