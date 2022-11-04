@@ -115,6 +115,7 @@ const styles = StyleSheet.create({
   },
   image: {
     aspectRatio: 1,
+    backgroundColor: '#f8f8f8',
   },
   top: {
     flexDirection: 'row',
@@ -123,6 +124,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
   },
   profile: {
+    backgroundColor: '#ccc',
     width: 40,
     height: 40,
     borderRadius: 20,
