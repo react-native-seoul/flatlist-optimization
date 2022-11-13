@@ -1,7 +1,6 @@
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   ListRenderItem,
   Pressable,
   StyleSheet,
@@ -10,6 +9,7 @@ import {
 import {type Photo, useAlbum} from '../hooks/useAlbum';
 import React, {memo, useCallback, useEffect, useState} from 'react';
 import {consoleCount} from '../utils';
+import FastImage from 'react-native-fast-image';
 
 export default function HomeScreen(): React.ReactElement {
   const {data, onLoadNext} = useAlbum(100);
@@ -85,7 +85,7 @@ const PhotoView = memo(({photo, onPress, selected}: PhotoViewProps) => {
 
   return (
     <Pressable style={styles.image} onPress={onPressPhotoView}>
-      <Image
+      <FastImage
         onLoadEnd={onLoadEndImage}
         resizeMode={'cover'}
         source={{uri: photo.url}}

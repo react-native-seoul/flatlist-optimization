@@ -11,6 +11,7 @@ import {
 import {Post, useFeed} from '../hooks/useFeed';
 import React, {useEffect, useState} from 'react';
 
+import FastImage from 'react-native-fast-image';
 import {ListRenderItem} from 'react-native';
 import {consoleCount} from '../utils';
 import dayjs from 'dayjs';
@@ -59,7 +60,7 @@ const PostCard = React.memo(({post}: PostCardProps) => {
   return (
     <View>
       <View style={styles.top}>
-        <Image
+        <FastImage
           resizeMode={'cover'}
           source={{uri: post.profile}}
           style={styles.profile}
@@ -68,7 +69,7 @@ const PostCard = React.memo(({post}: PostCardProps) => {
       </View>
 
       <View style={styles.image}>
-        <Image
+        <FastImage
           onLoadEnd={() => setLoading(false)}
           resizeMode={'cover'}
           source={{uri: post.photo}}
