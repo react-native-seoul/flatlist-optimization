@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import 'dayjs/locale/ko';
+
 import {
   ActivityIndicator,
   FlatList,
@@ -8,24 +9,34 @@ import {
   View,
 } from 'react-native';
 import {Post, useFeed} from '../hooks/useFeed';
+import React, {useEffect, useState} from 'react';
+
+import {ListRenderItem} from 'react-native';
 import {consoleCount} from '../utils';
 import dayjs from 'dayjs';
-import 'dayjs/locale/ko';
 import lf from 'dayjs/plugin/localizedFormat';
+
 dayjs.locale('ko');
 dayjs.extend(lf);
 
 export default function FeedScreen(): React.ReactElement {
   const {data, onLoadNext} = useFeed(30);
 
+  const renderItem: ListRenderItem<Post> = ({item}) => (
+    <PostCard key={item.id} post={item} />
+  );
+
+  const keyExtractor = (item: Post) => item.id;
+
+  const itemSeparatorComponent = () => <View style={{height: 24}} />;
+
   return (
     <FlatList
       style={styles.container}
       data={data}
-      renderItem={({item}) => {
-        return <PostCard key={item.id} post={item} />;
-      }}
-      ItemSeparatorComponent={() => <View style={{height: 24}} />}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      ItemSeparatorComponent={itemSeparatorComponent}
       onEndReached={onLoadNext}
     />
   );
@@ -34,7 +45,7 @@ export default function FeedScreen(): React.ReactElement {
 type PostCardProps = {
   post: Post;
 };
-const PostCard = ({post}: PostCardProps) => {
+const PostCard = React.memo(({post}: PostCardProps) => {
   const [loading, setLoading] = useState(true);
 
   consoleCount('render PostCard:' + post.id);
@@ -43,7 +54,7 @@ const PostCard = ({post}: PostCardProps) => {
     return () => {
       consoleCount('unmount PostCard:' + post.id);
     };
-  }, []);
+  }, [post.id]);
 
   return (
     <View>
@@ -107,7 +118,7 @@ const PostCard = ({post}: PostCardProps) => {
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
