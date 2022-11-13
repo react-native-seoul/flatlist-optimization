@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -12,19 +12,29 @@ import {consoleCount} from '../utils';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import lf from 'dayjs/plugin/localizedFormat';
+import FastImage from 'react-native-fast-image';
 dayjs.locale('ko');
 dayjs.extend(lf);
 
 export default function FeedScreen(): React.ReactElement {
   const {data, onLoadNext} = useFeed(30);
 
+  const postCardItem = useCallback(
+    ({item}: {item: Post}) => <PostCard key={item.id} post={item} />,
+    [],
+  );
+
+  const keyExtractor = useCallback(key => key.id.toString(), []);
+
   return (
     <FlatList
+      keyExtractor={keyExtractor}
+      maxToRenderPerBatch={2}
+      windowSize={2}
+      removeClippedSubviews={true}
       style={styles.container}
       data={data}
-      renderItem={({item}) => {
-        return <PostCard key={item.id} post={item} />;
-      }}
+      renderItem={postCardItem}
       ItemSeparatorComponent={() => <View style={{height: 24}} />}
       onEndReached={onLoadNext}
     />
@@ -34,6 +44,7 @@ export default function FeedScreen(): React.ReactElement {
 type PostCardProps = {
   post: Post;
 };
+
 const PostCard = ({post}: PostCardProps) => {
   const [loading, setLoading] = useState(true);
 
@@ -57,7 +68,7 @@ const PostCard = ({post}: PostCardProps) => {
       </View>
 
       <View style={styles.image}>
-        <Image
+        <FastImage
           onLoadEnd={() => setLoading(false)}
           resizeMode={'cover'}
           source={{uri: post.photo}}
