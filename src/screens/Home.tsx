@@ -16,27 +16,29 @@ export default function HomeScreen(): React.ReactElement {
   const [photoIds, setPhotoIds] = useState<string[]>([]);
 
   const PhotoViewItem = useCallback(({item}: {item: Photo}) => {
-    return (
-      <PhotoView
-        key={item.id}
-        selected={photoIds.indexOf(item.id) > -1}
-        photo={item}
-        onPress={photo => {
-          setPhotoIds(([...draft]) => {
-            const idx = draft.indexOf(photo.id);
+      return (
+        <PhotoView
+          key={item.id}
+          selected={photoIds.indexOf(item.id) > -1}
+          photo={item}
+          onPress={photo => {
+            setPhotoIds(([...draft]) => {
+              const idx = draft.indexOf(photo.id);
 
-            if (idx > -1) {
-              draft.splice(idx, 1);
-            } else {
-              draft.push(photo.id);
-            }
+              if (idx > -1) {
+                draft.splice(idx, 1);
+              } else {
+                draft.push(photo.id);
+              }
 
-            return draft;
-          });
-        }}
-      />
-    );
-  }, [])
+              return draft;
+            });
+          }}
+        />
+      );
+    },
+    [photoIds],
+  );
 
   const keyExtractor = useCallback(key => key.id.toString(), []);
 
