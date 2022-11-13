@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
   Image,
+  ListRenderItem,
   Pressable,
   StyleSheet,
   View,
 } from 'react-native';
-import {Photo, useAlbum} from '../hooks/useAlbum';
+import {type Photo, useAlbum} from '../hooks/useAlbum';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import {consoleCount} from '../utils';
 
 export default function HomeScreen(): React.ReactElement {
@@ -15,34 +16,47 @@ export default function HomeScreen(): React.ReactElement {
 
   const [photoIds, setPhotoIds] = useState<string[]>([]);
 
+  const onPressPhoto = useCallback((photo: Photo) => {
+    setPhotoIds(([...draft]) => {
+      const idx = draft.indexOf(photo.id);
+
+      if (idx > -1) {
+        draft.splice(idx, 1);
+      } else {
+        draft.push(photo.id);
+      }
+
+      return draft;
+    });
+  }, []);
+
+  const renderItem: ListRenderItem<Photo> = ({item}) => (
+    <PhotoView
+      key={item.id}
+      selected={photoIds.indexOf(item.id) > -1}
+      photo={item}
+      onPress={onPressPhoto}
+    />
+  );
+
+  const keyExtractor = (item: Photo) => item.id;
+
+  const getItemLayout = (items: Photo[] | undefined | null, index: number) => ({
+    length: 120,
+    offset: 120 * index,
+    index,
+  });
+
   return (
     <View style={styles.container}>
       <FlatList
+        removeClippedSubviews
+        keyExtractor={keyExtractor}
         contentContainerStyle={styles.sectionContainer}
+        getItemLayout={getItemLayout}
         numColumns={3}
         data={data}
-        renderItem={({item}) => {
-          return (
-            <PhotoView
-              key={item.id}
-              selected={photoIds.indexOf(item.id) > -1}
-              photo={item}
-              onPress={photo => {
-                setPhotoIds(([...draft]) => {
-                  const idx = draft.indexOf(photo.id);
-
-                  if (idx > -1) {
-                    draft.splice(idx, 1);
-                  } else {
-                    draft.push(photo.id);
-                  }
-
-                  return draft;
-                });
-              }}
-            />
-          );
-        }}
+        renderItem={renderItem}
         onEndReached={onLoadNext}
       />
     </View>
@@ -55,8 +69,11 @@ type PhotoViewProps = {
   onPress: (photo: Photo) => void;
 };
 
-const PhotoView = ({photo, onPress, selected}: PhotoViewProps) => {
+const PhotoView = memo(({photo, onPress, selected}: PhotoViewProps) => {
   const [loading, setLoading] = useState(true);
+
+  const onPressPhotoView = useCallback(() => onPress(photo), [photo, onPress]);
+  const onLoadEndImage = useCallback(() => setLoading(false), []);
 
   consoleCount('render PhotoView:' + photo.id);
 
@@ -64,16 +81,19 @@ const PhotoView = ({photo, onPress, selected}: PhotoViewProps) => {
     return () => {
       consoleCount('unmount PhotoView:' + photo.id);
     };
-  }, []);
+  }, [photo.id]);
 
   return (
-    <Pressable style={styles.image} onPress={() => onPress(photo)}>
+    <Pressable style={styles.image} onPress={onPressPhotoView}>
       <Image
-        onLoadEnd={() => setLoading(false)}
+        onLoadEnd={onLoadEndImage}
         resizeMode={'cover'}
         source={{uri: photo.url}}
         style={StyleSheet.absoluteFill}
       />
+      {loading && (
+        <ActivityIndicator style={StyleSheet.absoluteFill} color={'#363638'} />
+      )}
       {!loading && (
         <View
           style={[
@@ -82,12 +102,9 @@ const PhotoView = ({photo, onPress, selected}: PhotoViewProps) => {
           ]}
         />
       )}
-      {loading && (
-        <ActivityIndicator style={StyleSheet.absoluteFill} color={'#363638'} />
-      )}
     </Pressable>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
