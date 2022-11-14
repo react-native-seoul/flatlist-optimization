@@ -61,7 +61,7 @@ export default function HomeScreen(): React.ReactElement {
         renderItem={renderItem}
         onEndReached={onLoadNext}
         maxToRenderPerBatch={20}
-        initialNumToRender={15}
+        initialNumToRender={20}
         getItemLayout={getItemLayout}
       />
     </View>
@@ -74,7 +74,7 @@ type PhotoViewProps = {
   onPress: (photo: Photo) => void;
 };
 
-const PhotoView = ({photo, onPress, selected}: PhotoViewProps) => {
+const PhotoView = React.memo(({photo, onPress, selected}: PhotoViewProps) => {
   const [loading, setLoading] = useState(true);
 
   consoleCount('render PhotoView:' + photo.id);
@@ -106,7 +106,7 @@ const PhotoView = ({photo, onPress, selected}: PhotoViewProps) => {
       )}
     </Pressable>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
