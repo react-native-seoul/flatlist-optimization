@@ -1,19 +1,45 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   Pressable,
   StyleSheet,
   View,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {Photo, useAlbum} from '../hooks/useAlbum';
 import {consoleCount} from '../utils';
 
 export default function HomeScreen(): React.ReactElement {
-  const {data, onLoadNext} = useAlbum(100);
+  const {data, onLoadNext} = useAlbum(99);
 
   const [photoIds, setPhotoIds] = useState<string[]>([]);
+
+  const renderItem = useCallback(
+    ({item}: {item: Photo}) => {
+      return (
+        <PhotoView
+          key={item.id}
+          selected={photoIds.indexOf(item.id) > -1}
+          photo={item}
+          onPress={photo => {
+            setPhotoIds(([...draft]) => {
+              const idx = draft.indexOf(photo.id);
+
+              if (idx > -1) {
+                draft.splice(idx, 1);
+              } else {
+                draft.push(photo.id);
+              }
+
+              return draft;
+            });
+          }}
+        />
+      );
+    },
+    [photoIds],
+  );
 
   return (
     <View style={styles.container}>
@@ -21,29 +47,12 @@ export default function HomeScreen(): React.ReactElement {
         contentContainerStyle={styles.sectionContainer}
         numColumns={3}
         data={data}
-        renderItem={({item}) => {
-          return (
-            <PhotoView
-              key={item.id}
-              selected={photoIds.indexOf(item.id) > -1}
-              photo={item}
-              onPress={photo => {
-                setPhotoIds(([...draft]) => {
-                  const idx = draft.indexOf(photo.id);
-
-                  if (idx > -1) {
-                    draft.splice(idx, 1);
-                  } else {
-                    draft.push(photo.id);
-                  }
-
-                  return draft;
-                });
-              }}
-            />
-          );
-        }}
+        renderItem={renderItem}
         onEndReached={onLoadNext}
+        removeClippedSubviews={true}
+        maxToRenderPerBatch={60}
+        updateCellsBatchingPeriod={200}
+        initialNumToRender={60}
       />
     </View>
   );
@@ -68,7 +77,7 @@ const PhotoView = ({photo, onPress, selected}: PhotoViewProps) => {
 
   return (
     <Pressable style={styles.image} onPress={() => onPress(photo)}>
-      <Image
+      <FastImage
         onLoadEnd={() => setLoading(false)}
         resizeMode={'cover'}
         source={{uri: photo.url}}

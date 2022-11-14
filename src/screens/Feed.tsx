@@ -12,6 +12,7 @@ import {consoleCount} from '../utils';
 import dayjs from 'dayjs';
 import 'dayjs/locale/ko';
 import lf from 'dayjs/plugin/localizedFormat';
+import FastImage from 'react-native-fast-image';
 dayjs.locale('ko');
 dayjs.extend(lf);
 
@@ -27,6 +28,10 @@ export default function FeedScreen(): React.ReactElement {
       }}
       ItemSeparatorComponent={() => <View style={{height: 24}} />}
       onEndReached={onLoadNext}
+      removeClippedSubviews={true}
+      maxToRenderPerBatch={30}
+      updateCellsBatchingPeriod={200}
+      initialNumToRender={30}
     />
   );
 }
@@ -48,7 +53,7 @@ const PostCard = ({post}: PostCardProps) => {
   return (
     <View>
       <View style={styles.top}>
-        <Image
+        <FastImage
           resizeMode={'cover'}
           source={{uri: post.profile}}
           style={styles.profile}
@@ -57,7 +62,7 @@ const PostCard = ({post}: PostCardProps) => {
       </View>
 
       <View style={styles.image}>
-        <Image
+        <FastImage
           onLoadEnd={() => setLoading(false)}
           resizeMode={'cover'}
           source={{uri: post.photo}}
@@ -74,24 +79,24 @@ const PostCard = ({post}: PostCardProps) => {
       <View style={styles.bottom}>
         <View style={styles.icons}>
           <View style={styles.iconsLeft}>
-            <Image
+            <FastImage
               source={require('../../assets/Like.png')}
               style={styles.icon}
               resizeMode={'contain'}
             />
-            <Image
+            <FastImage
               source={require('../../assets/Comment.png')}
               style={styles.icon}
               resizeMode={'contain'}
             />
-            <Image
+            <FastImage
               source={require('../../assets/Share.png')}
               style={styles.icon}
               resizeMode={'contain'}
             />
           </View>
           <View>
-            <Image
+            <FastImage
               source={require('../../assets/Bookmark.png')}
               style={[styles.icon, {marginRight: 0}]}
             />
