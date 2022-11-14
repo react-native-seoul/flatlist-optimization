@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -16,16 +16,23 @@ dayjs.locale('ko');
 dayjs.extend(lf);
 
 export default function FeedScreen(): React.ReactElement {
-  const {data, onLoadNext} = useFeed(30);
+  const {data, onLoadNext} = useFeed(30); // TODO: ?
+
+  const renderItem = useCallback(
+    ({item}) => <PostCard key={item.id} post={item} />,
+    [],
+  );
+  const ItemSeparatorComponent = useCallback(
+    () => <View style={{height: 24}} />,
+    [],
+  );
 
   return (
     <FlatList
       style={styles.container}
       data={data}
-      renderItem={({item}) => {
-        return <PostCard key={item.id} post={item} />;
-      }}
-      ItemSeparatorComponent={() => <View style={{height: 24}} />}
+      renderItem={renderItem}
+      ItemSeparatorComponent={ItemSeparatorComponent}
       onEndReached={onLoadNext}
     />
   );
@@ -36,6 +43,8 @@ type PostCardProps = {
 };
 const PostCard = ({post}: PostCardProps) => {
   const [loading, setLoading] = useState(true);
+
+  const onLoadEnd = useCallback(() => setLoading(false), []);
 
   consoleCount('render PostCard:' + post.id);
 
@@ -58,7 +67,7 @@ const PostCard = ({post}: PostCardProps) => {
 
       <View style={styles.image}>
         <Image
-          onLoadEnd={() => setLoading(false)}
+          onLoadEnd={onLoadEnd}
           resizeMode={'cover'}
           source={{uri: post.photo}}
           style={StyleSheet.absoluteFill}

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useMemo, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -15,34 +15,36 @@ export default function HomeScreen(): React.ReactElement {
 
   const [photoIds, setPhotoIds] = useState<string[]>([]);
 
+  const renderItem = useCallback(
+    ({item}) => (
+      <PhotoView
+        key={item.id}
+        selected={photoIds.indexOf(item.id) > -1}
+        photo={item}
+        onPress={photo => {
+          setPhotoIds(([...draft]) => {
+            const idx = draft.indexOf(photo.id);
+
+            if (idx > -1) {
+              draft.splice(idx, 1);
+            } else {
+              draft.push(photo.id);
+            }
+            return draft;
+          });
+        }}
+      />
+    ),
+    [photoIds],
+  );
+
   return (
     <View style={styles.container}>
       <FlatList
         contentContainerStyle={styles.sectionContainer}
         numColumns={3}
         data={data}
-        renderItem={({item}) => {
-          return (
-            <PhotoView
-              key={item.id}
-              selected={photoIds.indexOf(item.id) > -1}
-              photo={item}
-              onPress={photo => {
-                setPhotoIds(([...draft]) => {
-                  const idx = draft.indexOf(photo.id);
-
-                  if (idx > -1) {
-                    draft.splice(idx, 1);
-                  } else {
-                    draft.push(photo.id);
-                  }
-
-                  return draft;
-                });
-              }}
-            />
-          );
-        }}
+        renderItem={renderItem}
         onEndReached={onLoadNext}
       />
     </View>
@@ -58,6 +60,14 @@ type PhotoViewProps = {
 const PhotoView = ({photo, onPress, selected}: PhotoViewProps) => {
   const [loading, setLoading] = useState(true);
 
+  const onPressImage = useCallback(() => onPress(photo), []);
+  const onLoadEnd = useCallback(() => setLoading(false), []);
+
+  const notLoadingStyle = useMemo(
+    () => [styles.mark, {backgroundColor: selected ? '#3175ff' : '#f8f8f8'}],
+    [selected],
+  );
+
   consoleCount('render PhotoView:' + photo.id);
 
   useEffect(() => {
@@ -67,21 +77,14 @@ const PhotoView = ({photo, onPress, selected}: PhotoViewProps) => {
   }, []);
 
   return (
-    <Pressable style={styles.image} onPress={() => onPress(photo)}>
+    <Pressable style={styles.image} onPress={onPressImage}>
       <Image
-        onLoadEnd={() => setLoading(false)}
+        onLoadEnd={onLoadEnd}
         resizeMode={'cover'}
         source={{uri: photo.url}}
         style={StyleSheet.absoluteFill}
       />
-      {!loading && (
-        <View
-          style={[
-            styles.mark,
-            {backgroundColor: selected ? '#3175ff' : '#f8f8f8'},
-          ]}
-        />
-      )}
+      {!loading && <View style={notLoadingStyle} />}
       {loading && (
         <ActivityIndicator style={StyleSheet.absoluteFill} color={'#363638'} />
       )}
