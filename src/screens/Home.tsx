@@ -2,11 +2,11 @@ import React, {useCallback, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
-  Image,
   Pressable,
   StyleSheet,
   View,
 } from 'react-native';
+import FastImage from 'react-native-fast-image';
 import {Photo, useAlbum} from '../hooks/useAlbum';
 import {consoleCount} from '../utils';
 
@@ -75,7 +75,7 @@ const PhotoView = React.memo(({photo, onPress, selected}: PhotoViewProps) => {
 
   return (
     <Pressable style={styles.image} onPress={() => onPress(photo)}>
-      <Image
+      <FastImage
         onLoadEnd={() => setLoading(false)}
         resizeMode={'cover'}
         source={{uri: photo.url}}
