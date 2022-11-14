@@ -41,6 +41,7 @@ export default function HomeScreen(): React.ReactElement {
   return (
     <View style={styles.container}>
       <FlatList
+        removeClippedSubviews={true}
         contentContainerStyle={styles.sectionContainer}
         numColumns={3}
         data={data}

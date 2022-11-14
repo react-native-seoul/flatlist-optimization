@@ -29,6 +29,7 @@ export default function FeedScreen(): React.ReactElement {
 
   return (
     <FlatList
+      removeClippedSubviews={true}
       style={styles.container}
       data={data}
       renderItem={renderItem}
