@@ -62,6 +62,7 @@ export default function HomeScreen(): React.ReactElement {
         onEndReached={onLoadNext}
         maxToRenderPerBatch={20}
         initialNumToRender={20}
+        windowSize={5}
         getItemLayout={getItemLayout}
       />
     </View>
