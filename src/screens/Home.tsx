@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -15,34 +15,41 @@ export default function HomeScreen(): React.ReactElement {
 
   const [photoIds, setPhotoIds] = useState<string[]>([]);
 
+  const onPress = useCallback(photo => {
+    setPhotoIds(([...draft]) => {
+      const idx = draft.indexOf(photo.id);
+
+      if (idx > -1) {
+        draft.splice(idx, 1);
+      } else {
+        draft.push(photo.id);
+      }
+
+      return draft;
+    });
+  }, []);
+
+  const renderItem = useCallback(
+    ({item}) => {
+      return (
+        <PhotoView
+          key={item.id}
+          selected={photoIds.indexOf(item.id) > -1}
+          photo={item}
+          onPress={onPress}
+        />
+      );
+    },
+    [photoIds],
+  );
+
   return (
     <View style={styles.container}>
       <FlatList
         contentContainerStyle={styles.sectionContainer}
         numColumns={3}
         data={data}
-        renderItem={({item}) => {
-          return (
-            <PhotoView
-              key={item.id}
-              selected={photoIds.indexOf(item.id) > -1}
-              photo={item}
-              onPress={photo => {
-                setPhotoIds(([...draft]) => {
-                  const idx = draft.indexOf(photo.id);
-
-                  if (idx > -1) {
-                    draft.splice(idx, 1);
-                  } else {
-                    draft.push(photo.id);
-                  }
-
-                  return draft;
-                });
-              }}
-            />
-          );
-        }}
+        renderItem={renderItem}
         onEndReached={onLoadNext}
       />
     </View>
@@ -55,7 +62,7 @@ type PhotoViewProps = {
   onPress: (photo: Photo) => void;
 };
 
-const PhotoView = ({photo, onPress, selected}: PhotoViewProps) => {
+const PhotoView = React.memo(({photo, onPress, selected}: PhotoViewProps) => {
   const [loading, setLoading] = useState(true);
 
   consoleCount('render PhotoView:' + photo.id);
@@ -87,7 +94,7 @@ const PhotoView = ({photo, onPress, selected}: PhotoViewProps) => {
       )}
     </Pressable>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
