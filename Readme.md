@@ -32,6 +32,19 @@ const postCardItem = useCallback(
 );
 ```
 
+### useMemo
+`useMemo`로 컴포넌트를 감싸서 props가 변동 될때만 렌더링 되게 순수 컴포넌트로 만듭니다.
+
+```js
+const PostCard = memo(({post}: PostCardProps) => {
+  ...
+
+  return (
+    ...
+  );
+});
+```
+
 ### keyExtractor
 `keyExtractor`는 키는 캐싱에 사용되며 항목 `re-ordering`을 추적하기 위한 반응 키로 사용됩니다.
 
@@ -74,7 +87,5 @@ default 값이 `21` 이고 뷰포트 위로 최대 10개, 아래로 최대 10개
   windowSize={2}
 />
 ```
-
-이외에 `FlatList`에서 렌더 되는 컴포넌트를 `useMemo`등을 사용하여 순수 컴포넌트로 만드는 방법도 있습니다.
 
 예시의 경우 위에 항목들을 적용하기 전에도 큰 성능 문제가 없었기 때문에 위에서 했던 최적화 방법들을 적용해도 큰 차이를 못 느꼈습니다.

@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useState} from 'react';
+import React, {memo, useCallback, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -45,7 +45,7 @@ type PostCardProps = {
   post: Post;
 };
 
-const PostCard = ({post}: PostCardProps) => {
+const PostCard = memo(({post}: PostCardProps) => {
   const [loading, setLoading] = useState(true);
 
   consoleCount('render PostCard:' + post.id);
@@ -118,7 +118,7 @@ const PostCard = ({post}: PostCardProps) => {
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
