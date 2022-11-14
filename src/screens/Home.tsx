@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   FlatList,
@@ -9,11 +9,47 @@ import {
 } from 'react-native';
 import {Photo, useAlbum} from '../hooks/useAlbum';
 import {consoleCount} from '../utils';
+import {Dimensions} from 'react-native';
+
+const windowWidth = Dimensions.get('window').width;
 
 export default function HomeScreen(): React.ReactElement {
   const {data, onLoadNext} = useAlbum(100);
 
   const [photoIds, setPhotoIds] = useState<string[]>([]);
+
+  const onPress = (photo: Photo) => {
+    setPhotoIds(([...draft]) => {
+      const idx = draft.indexOf(photo.id);
+
+      if (idx > -1) {
+        draft.splice(idx, 1);
+      } else {
+        draft.push(photo.id);
+      }
+
+      return draft;
+    });
+  };
+
+  const renderItem = useCallback(
+    ({item}) => (
+      <PhotoView
+        key={item.id}
+        selected={photoIds.indexOf(item.id) > -1}
+        photo={item}
+        onPress={onPress}
+      />
+    ),
+    [photoIds],
+  );
+  const keyExtractor = useCallback((item: Photo) => item.id, []);
+
+  const getItemLayout = (data: Photo[] | null | undefined, index: number) => ({
+    length: windowWidth * 0.33,
+    offset: windowWidth * 0.33 * index,
+    index,
+  });
 
   return (
     <View style={styles.container}>
@@ -21,29 +57,12 @@ export default function HomeScreen(): React.ReactElement {
         contentContainerStyle={styles.sectionContainer}
         numColumns={3}
         data={data}
-        renderItem={({item}) => {
-          return (
-            <PhotoView
-              key={item.id}
-              selected={photoIds.indexOf(item.id) > -1}
-              photo={item}
-              onPress={photo => {
-                setPhotoIds(([...draft]) => {
-                  const idx = draft.indexOf(photo.id);
-
-                  if (idx > -1) {
-                    draft.splice(idx, 1);
-                  } else {
-                    draft.push(photo.id);
-                  }
-
-                  return draft;
-                });
-              }}
-            />
-          );
-        }}
+        keyExtractor={keyExtractor}
+        renderItem={renderItem}
         onEndReached={onLoadNext}
+        maxToRenderPerBatch={20}
+        initialNumToRender={15}
+        getItemLayout={getItemLayout}
       />
     </View>
   );
@@ -101,8 +120,8 @@ const styles = StyleSheet.create({
   image: {
     borderColor: 'white',
     borderWidth: 1,
-    width: '33.3%',
-    height: 120,
+    width: '33%',
+    // height: 120,
     aspectRatio: 1,
   },
   mark: {
