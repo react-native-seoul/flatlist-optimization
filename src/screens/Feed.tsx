@@ -57,8 +57,6 @@ const PostCard = memo(({post}: PostCardProps) => {
 
   consoleCount('render PostCard:' + post.id);
 
-  const onLoadEnd = useCallback(() => setLoading(false), []);
-
   useEffect(() => {
     return () => {
       consoleCount('unmount PostCard:' + post.id);
@@ -78,7 +76,7 @@ const PostCard = memo(({post}: PostCardProps) => {
 
       <View style={styles.image}>
         <FastImage
-          onLoadEnd={onLoadEnd}
+          onLoadEnd={() => setLoading(false)}
           resizeMode={'cover'}
           source={{uri: post.photo}}
           style={StyleSheet.absoluteFill}
