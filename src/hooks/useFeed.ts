@@ -1,6 +1,7 @@
+import {useCallback, useRef, useState} from 'react';
+
 import {UseDataList} from '../types';
 import {faker} from '@faker-js/faker/locale/ko';
-import {useCallback, useRef, useState} from 'react';
 
 export interface Post {
   id: string;
@@ -44,6 +45,6 @@ export const useFeed: UseDataList<Post> = (limit = 20) => {
       const next = feed.slice(cursor.current, cursor.current + limit);
       cursor.current = cursor.current + limit;
       setData(prev => prev.concat(next));
-    }, []),
+    }, [limit]),
   };
 };

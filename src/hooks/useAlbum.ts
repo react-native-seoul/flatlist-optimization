@@ -1,6 +1,7 @@
+import {useCallback, useRef, useState} from 'react';
+
 import {UseDataList} from '../types';
 import {faker} from '@faker-js/faker';
-import {useCallback, useRef, useState} from 'react';
 
 export interface Photo {
   id: string;
@@ -27,6 +28,6 @@ export const useAlbum: UseDataList<Photo> = (limit = 20) => {
       const next = album.slice(cursor.current, cursor.current + limit);
       cursor.current = cursor.current + limit;
       setData(prev => prev.concat(next));
-    }, []),
+    }, [limit]),
   };
 };

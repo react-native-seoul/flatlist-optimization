@@ -1,4 +1,5 @@
-import React, {useEffect, useState} from 'react';
+import 'dayjs/locale/ko';
+
 import {
   ActivityIndicator,
   FlatList,
@@ -8,24 +9,40 @@ import {
   View,
 } from 'react-native';
 import {Post, useFeed} from '../hooks/useFeed';
+import React, {memo, useCallback, useEffect, useState} from 'react';
+
+import FastImage from 'react-native-fast-image';
+import {ListRenderItem} from 'react-native';
 import {consoleCount} from '../utils';
 import dayjs from 'dayjs';
-import 'dayjs/locale/ko';
 import lf from 'dayjs/plugin/localizedFormat';
+
 dayjs.locale('ko');
 dayjs.extend(lf);
 
 export default function FeedScreen(): React.ReactElement {
   const {data, onLoadNext} = useFeed(30);
 
+  const renderItem: ListRenderItem<Post> = useCallback(
+    ({item}) => <PostCard key={item.id} post={item} />,
+    [],
+  );
+
+  const keyExtractor = useCallback((item: Post) => item.id, []);
+
+  const itemSeparatorComponent = useCallback(
+    () => <View style={{height: 24}} />,
+    [],
+  );
+
   return (
     <FlatList
+      removeClippedSubviews
       style={styles.container}
       data={data}
-      renderItem={({item}) => {
-        return <PostCard key={item.id} post={item} />;
-      }}
-      ItemSeparatorComponent={() => <View style={{height: 24}} />}
+      keyExtractor={keyExtractor}
+      renderItem={renderItem}
+      ItemSeparatorComponent={itemSeparatorComponent}
       onEndReached={onLoadNext}
     />
   );
@@ -34,7 +51,8 @@ export default function FeedScreen(): React.ReactElement {
 type PostCardProps = {
   post: Post;
 };
-const PostCard = ({post}: PostCardProps) => {
+
+const PostCard = memo(({post}: PostCardProps) => {
   const [loading, setLoading] = useState(true);
 
   consoleCount('render PostCard:' + post.id);
@@ -43,12 +61,12 @@ const PostCard = ({post}: PostCardProps) => {
     return () => {
       consoleCount('unmount PostCard:' + post.id);
     };
-  }, []);
+  }, [post.id]);
 
   return (
     <View>
       <View style={styles.top}>
-        <Image
+        <FastImage
           resizeMode={'cover'}
           source={{uri: post.profile}}
           style={styles.profile}
@@ -57,7 +75,7 @@ const PostCard = ({post}: PostCardProps) => {
       </View>
 
       <View style={styles.image}>
-        <Image
+        <FastImage
           onLoadEnd={() => setLoading(false)}
           resizeMode={'cover'}
           source={{uri: post.photo}}
@@ -107,7 +125,7 @@ const PostCard = ({post}: PostCardProps) => {
       </View>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {
