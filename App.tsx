@@ -8,17 +8,27 @@
  * @format
  */
 
-import React from 'react';
+import React, {useCallback} from 'react';
 import Navigation from './src/navigations/index';
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import {LogBox} from 'react-native';
+import {
+  PerformanceProfiler,
+  RenderPassReport,
+} from '@shopify/react-native-performance';
 
 const App = () => {
+  const onReportPrepared = useCallback((report: RenderPassReport) => {
+    console.log(report);
+  }, []);
+
   return (
     <>
       <SafeAreaProvider>
-        <Navigation />
+        <PerformanceProfiler onReportPrepared={onReportPrepared}>
+          <Navigation />
+        </PerformanceProfiler>
       </SafeAreaProvider>
     </>
   );

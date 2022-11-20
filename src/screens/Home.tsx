@@ -7,10 +7,12 @@ import {
   StyleSheet,
   View,
 } from 'react-native';
-import {type Photo, useAlbum} from '../hooks/useAlbum';
 import React, {memo, useCallback, useEffect, useState} from 'react';
-import {consoleCount} from '../utils';
 import FastImage from 'react-native-fast-image';
+import {PerformanceMeasureView} from '@shopify/react-native-performance';
+
+import {type Photo, useAlbum} from '../hooks/useAlbum';
+import {consoleCount} from '../utils';
 
 const windowWidth = Dimensions.get('window').width;
 
@@ -57,19 +59,21 @@ export default function HomeScreen(): React.ReactElement {
 
   return (
     <View style={styles.container}>
-      <FlatList
-        removeClippedSubviews
-        keyExtractor={keyExtractor}
-        contentContainerStyle={styles.sectionContainer}
-        getItemLayout={getItemLayout}
-        numColumns={3}
-        data={data}
-        maxToRenderPerBatch={20}
-        initialNumToRender={20}
-        windowSize={5}
-        renderItem={renderItem}
-        onEndReached={onLoadNext}
-      />
+      <PerformanceMeasureView screenName="homeScreen">
+        <FlatList
+          removeClippedSubviews
+          keyExtractor={keyExtractor}
+          contentContainerStyle={styles.sectionContainer}
+          getItemLayout={getItemLayout}
+          numColumns={3}
+          data={data}
+          maxToRenderPerBatch={20}
+          initialNumToRender={20}
+          windowSize={5}
+          renderItem={renderItem}
+          onEndReached={onLoadNext}
+        />
+      </PerformanceMeasureView>
     </View>
   );
 }
