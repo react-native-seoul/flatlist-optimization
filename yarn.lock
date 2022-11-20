@@ -1362,6 +1362,16 @@
     color "^4.2.3"
     warn-once "^0.1.0"
 
+"@shopify/react-native-performance-lists-profiler@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@shopify/react-native-performance-lists-profiler/-/react-native-performance-lists-profiler-1.1.0.tgz#298d899ac43f83d38356b15c16c6ba109fd6924e"
+  integrity sha512-Jj+9gMQxMqlO4dZFS9HDb8/aI8VraJL67aDrJpV2qWzWr7HUXah96qav3X7+jS0f6YvUDVzpe0cjy6WsVdo3+g==
+
+"@shopify/react-native-performance@^4.1.2":
+  version "4.1.2"
+  resolved "https://registry.yarnpkg.com/@shopify/react-native-performance/-/react-native-performance-4.1.2.tgz#bd111af291b85ee125feaccd54c8e5f237a76ce7"
+  integrity sha512-1Xu2xo+hAxg75iuX5akVqAgc3h/J1ohfi7JKXlGsprP4ylpW7kHMfq/7AstL7FoUC8xcHsTUvUFhoZ94ot8g6Q==
+
 "@sideway/address@^4.1.3":
   version "4.1.4"
   resolved "https://registry.yarnpkg.com/@sideway/address/-/address-4.1.4.tgz#03dccebc6ea47fdc226f7d3d1ad512955d4783f0"
@@ -5806,6 +5816,11 @@ react-native-fast-image@^8.6.3:
   version "8.6.3"
   resolved "https://registry.yarnpkg.com/react-native-fast-image/-/react-native-fast-image-8.6.3.tgz#6edc3f9190092a909d636d93eecbcc54a8822255"
   integrity sha512-Sdw4ESidXCXOmQ9EcYguNY2swyoWmx53kym2zRsvi+VeFCHEdkO+WG1DK+6W81juot40bbfLNhkc63QnWtesNg==
+
+react-native-flipper@^0.174.0:
+  version "0.174.0"
+  resolved "https://registry.yarnpkg.com/react-native-flipper/-/react-native-flipper-0.174.0.tgz#acb57d4cea68551edff73c0f17999e519b39614c"
+  integrity sha512-9WAUxqHLU57dYxD/Z5EkcU/MdP1KFWCxdZfeHJ6Ogq/GbJVawzibjVfGPVwc2GoLIMvE6rZ0Fvvw4AUIdykc/g==
 
 react-native-gesture-handler@^2.8.0:
   version "2.8.0"
