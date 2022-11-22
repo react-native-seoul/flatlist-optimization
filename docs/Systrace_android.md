@@ -20,6 +20,11 @@ trace 수집이 끝나고 생성된 html 파일을 브라우저로 열었는데�
 
 성능을 측정하기 위해 android의 연산/레이아웃/드로우를 담당하는 UI Thread와 JavaScript가 실행되는 JS Thread(mqt_js or <…>)를 살펴봅니다.
 
+
+
+https://user-images.githubusercontent.com/29711964/203386855-4b0c212b-368d-4d77-b6d7-79a67fac0286.mp4
+
+
 아래는 최적화 전인 앱 화면에서 FlatList의 스크롤을 5초간 내리는동안 수집한 trace 결과입니다.
 
 - UI Thread에서 Android 관련 메소드인 traversal, draw, Record 등의 수행이 잦게 일어나고 있습니다.
