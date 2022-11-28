@@ -24,6 +24,8 @@ trace 수집이 끝나고 생성된 html 파일을 브라우저로 열었는데�
 
 https://user-images.githubusercontent.com/29711964/203386855-4b0c212b-368d-4d77-b6d7-79a67fac0286.mp4
 
+<br/> <br/>
+
 
 아래는 최적화 전인 앱 화면에서 FlatList의 스크롤을 5초간 내리는동안 수집한 trace 결과입니다.
 
@@ -35,6 +37,8 @@ https://user-images.githubusercontent.com/29711964/203386855-4b0c212b-368d-4d77-
 
 <img width="862" alt="general_jsThread" src="https://user-images.githubusercontent.com/29711964/203381356-1a04b12a-4a4b-4073-ad35-7cb631ae8813.png">
 
+<br/>
+
 최적화 전 후를 육안으로 비교하기 위해 앵글 범위를 넓혀 특정 프레임 구간을 보겠습니다. 눈에 띄는 구간(이상치)을 붉은색 영역으로 표시해 두었습니다.
 
 0ms ~ 2500ms 구간 사이의 UI Thread 입니다.
@@ -44,6 +48,8 @@ https://user-images.githubusercontent.com/29711964/203386855-4b0c212b-368d-4d77-
 400ms ~ 1000ms 구간 사이의 JS Thread(mqt_js) 입니다.
 
 <img width="626" alt="최적화_전_js스레드" src="https://user-images.githubusercontent.com/29711964/203381458-a7ea2edf-42bb-4172-bef8-59c35c5398b1.png">
+
+<br/> <br/>
 
 ## 최적화 이후 안드로이드 앱에서 측정
 
@@ -57,6 +63,7 @@ https://user-images.githubusercontent.com/29711964/203386855-4b0c212b-368d-4d77-
 
 0ms ~ 1000ms 구간 사이의 JS Thread(mqt_js) 입니다.
 
-- 이 스레드 또한 최적화 전과 비교할때 연산 블록의 너비가 좁아지고, 육안 차이가 미미하지만 호출 빈도가 줄었습니다.
+- Outlier?: 이 스레드 또한 최적화 전과 비교할때 블록의 너비가 좁아지고, 육안 차이가 미미하지만 호출 빈도가 줄었습니다. 
+- DispatchEventsRunnable를 수행하는데 걸리는 시간이 최적화 전과 비교하면 조금 짧아졌습니다.
 
 <img width="646" alt="최적화_후_js스레드" src="https://user-images.githubusercontent.com/29711964/203381779-9755feef-2072-4b77-b462-8f43eed0e67d.png">
