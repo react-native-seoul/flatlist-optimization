@@ -20,6 +20,7 @@ trace 수집이 끝나고 생성된 html 파일을 브라우저로 열었는데�
 
 성능을 측정하기 위해 android의 연산/레이아웃/드로우를 담당하는 UI Thread와 JavaScript가 실행되는 JS Thread(mqt_js or <…>)를 살펴봅니다.
 
+아래는 systrace를 측정한 앱 인터랙션 입니다. (최적화 전/후 동일한 화면과 인터랙션을 주었습니다)
 
 
 https://user-images.githubusercontent.com/29711964/203386855-4b0c212b-368d-4d77-b6d7-79a67fac0286.mp4
