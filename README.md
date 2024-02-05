@@ -64,7 +64,7 @@ const renderItem: ListRenderItem<Photo> = useCallback(
 
 #### 2-3. getItemLayout
 
-- 리스트의 높이와 너비를 미리 확정할 수 있습니다. `getItemLayout`이 제공되지 않으면 각 `Cell` 컴포넌트에 `onLayout` 함수가 [전달됩니다](https://github.com/facebook/react-native/blob/main/Libraries/Lists/VirtualizedListCellRenderer.js#L199-L203). `onLayout` 함수는 렌더링 되는 `Cell` 컴포넌트의 높이를 저장하고 리스트 정보를 갱신하는 [무거운 로직](https://github.com/facebook/react-native/blob/main/Libraries/Lists/VirtualizedList.js#L1175-L1208)을 수행합니다.
+- 리스트의 높이와 너비를 미리 확정할 수 있습니다. `getItemLayout`이 제공되지 않으면 각 `Cell` 컴포넌트에 `onLayout` 함수가 [전달됩니다](https://github.com/facebook/react-native/blob/main/packages/virtualized-lists/Lists/VirtualizedListCellRenderer.js#L199-L203). `onLayout` 함수는 렌더링 되는 `Cell` 컴포넌트의 높이를 저장하고 리스트 정보를 갱신하는 [무거운 로직](https://github.com/facebook/react-native/blob/main/packages/virtualized-lists/Lists/VirtualizedList.js#L1175-L1208)을 수행합니다.
   이를 통해 각 아이템이 렌더링 될 때 레이아웃 계산 과정이 줄어들어 최적화에 도움이 됩니다.
 
 #### 2-4 windowSize
